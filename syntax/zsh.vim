@@ -33,6 +33,7 @@ syn region zshComment start=/\v^\s*#/    end=/\v^(\s*#)@!/ contains=zshTodo,@Spe
 
 " Pre processors {{{2
 syn match zshPreProc /\v^%1l#(!|compdef|autoload).*$/
+syn match zshPreProc /\v^%2l#description.+$/
 
 " Literals {{{2
 syn match zshLiteral /\\./
