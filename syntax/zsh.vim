@@ -320,7 +320,7 @@ syn match zshOption /
 syn keyword zshTypes float integer local typeset declare private readonly
 
 " Switches {{{2
-" syn match zshSwitches /\s\zs--\?[a-zA-Z0-9-]\+/
+syn match zshSwitches /\v\s\zs--?[a-zA-Z0-9-]+/
 
 " Numbers {{{2
 syn match zshNumber /\v[+-]?<\d+>/
