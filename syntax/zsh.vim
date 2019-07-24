@@ -28,14 +28,14 @@ endif
 syn keyword zshTodo contained TODO FIXME XXX NOTE
 
 " Comments {{{2
-syn region zshComment start='\%(^\|\s\+\)#' end='$'             contains=zshTodo,@Spell fold oneline
-syn region zshComment start='^\s*#'         end='^\%(\s*#\)\@!' contains=zshTodo,@Spell fold
+syn region zshComment start=/\%(^\|\s\+\)#/ end=/$/             contains=zshTodo,@Spell fold oneline
+syn region zshComment start=/^\s*#/         end=/^\%(\s*#\)\@!/ contains=zshTodo,@Spell fold
 
 " Pre processors {{{2
-syn match zshPreProc '^\%1l#\%(!\|compdef\|autoload\).*$'
+syn match zshPreProc /^\%1l#\%(!\|compdef\|autoload\).*$/
 
 " Literals {{{2
-syn match zshLiteral '\\.'
+syn match zshLiteral /\\./
 
 " Strings {{{2
 syn region zshString   matchgroup=zshStrDelim start=+"+   end=+"+ fold contains=zshLiteral,@zshDerefs,@zshSubst
@@ -43,7 +43,7 @@ syn region zshString   matchgroup=zshStrDelim start=+'+   end=+'+ fold
 syn region zshPOSIXStr matchgroup=zshStrDelim start=+\$'+ end=+'+      contains=zshLiteral
 
 " Job names {{{2
-syn match zshJobSpec '%\(\d\+\|?\=\w\+\|[%+-]\)'
+syn match zshJobSpec /%\(\d\+\|?\=\w\+\|[%+-]\)/
 
 " Pre-command modifiers {{{2
 syn keyword zshPreCmd noglob nocorrect exec command builtin - time
@@ -62,17 +62,17 @@ syn keyword zshRepeat for foreach nextgroup=zshVariable skipwhite
 syn keyword zshException always
 
 " Functions {{{2
-syn keyword zshKeyword  function nextgroup=zshKSHFunc skipwhite
-syn match   zshKSHFunc  contained '\w\S\+'
-syn match   zshFunction '^\s*\k\+\ze\s*()'
+syn keyword zshKeyword  function skipwhite nextgroup=zshKSHFunc
+syn match   zshKSHFunc  /\w\S\+/ contained
+syn match   zshFunction /^\s*\k\+\ze\s*()/
 
 " Operators {{{2
-syn match zshOperator '||\|&&\|;\|&!\='
+syn match zshOperator /||\|&&\|;\|&!\=/
 
 " Redirects {{{2
-syn match zshRedir '\d\=\(<\|<>\|<<<\|<&\s*[0-9p-]\=\)'
-syn match zshRedir '\d\=\(>\|>>\|>&\s*[0-9p-]\=\|&>\|>>&\|&>>\)[|!]\='
-syn match zshRedir '|&\='
+syn match zshRedir /\d\=\(<\|<>\|<<<\|<&\s*[0-9p-]\=\)/
+syn match zshRedir /\d\=\(>\|>>\|>&\s*[0-9p-]\=\|&>\|>>&\|&>>\)[|!]\=/
+syn match zshRedir /|&\=/
 
 " HereDocs {{{2
 syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<\s*\z([^<]\S*\)'         end='^\z1\>'    contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
@@ -82,21 +82,21 @@ syn region zshHereDoc matchgroup=zshRedir start=+<\@<!<<\s*\(["']\)\z(\S\+\)\1+ 
 syn region zshHereDoc matchgroup=zshRedir start=+<\@<!<<-\s*\(["']\)\z(\S\+\)\1+ end='^\s*\z1\>'
 
 " Variables {{{2
-syn match  zshVariable    '\<\h\w*' contained
-syn match  zshVariableDef '\<\h\w*\ze+\=='
-syn region zshVariableDef start='\$\@<!\<\h\w*\[' end='\]\ze+\?=\?' oneline contains=@zshSubst
+syn match  zshVariable    /\<\h\w*/ contained
+syn match  zshVariableDef /\<\h\w*\ze+\==/
+syn region zshVariableDef start=/\$\@<!\<\h\w*\[/ end=/\]\ze+\?=\?/ oneline contains=@zshSubst
 
 syn cluster zshDerefs     contains=zshShortDeref,zshLongDeref,zshDeref,zshDollarVar
-syn match   zshShortDeref '\$[!#$*@?_-]\w\@!'
-syn match   zshShortDeref '\$[=^~]*[#+]*\d\+\>'
-syn match   zshLongDeref  '\$\%(ARGC\|argv\|status\|pipestatus\|CPUTYPE\|EGID\|EUID\|ERRNO\|GID\|HOST\|LINENO\|LOGNAME\)'
-syn match   zshLongDeref  '\$\%(MACHTYPE\|OLDPWD OPTARG\|OPTIND\|OSTYPE\|PPID\|PWD\|RANDOM\|SECONDS\|SHLVL\|signals\)'
-syn match   zshLongDeref  '\$\%(TRY_BLOCK_ERROR\|TTY\|TTYIDLE\|UID\|USERNAME\|VENDOR\|ZSH_NAME\|ZSH_VERSION\|REPLY\|reply\|TERM\)'
-syn match   zshDollarVar  '\$\h\w*'
-syn match   zshDeref      '\$[=^~]*[#+]*\h\w*\>'
+syn match   zshShortDeref /\$[!#$*@?_-]\w\@!/
+syn match   zshShortDeref /\$[=^~]*[#+]*\d\+\>/
+syn match   zshLongDeref  /\$\%(ARGC\|argv\|status\|pipestatus\|CPUTYPE\|EGID\|EUID\|ERRNO\|GID\|HOST\|LINENO\|LOGNAME\)/
+syn match   zshLongDeref  /\$\%(MACHTYPE\|OLDPWD OPTARG\|OPTIND\|OSTYPE\|PPID\|PWD\|RANDOM\|SECONDS\|SHLVL\|signals\)/
+syn match   zshLongDeref  /\$\%(TRY_BLOCK_ERROR\|TTY\|TTYIDLE\|UID\|USERNAME\|VENDOR\|ZSH_NAME\|ZSH_VERSION\|REPLY\|reply\|TERM\)/
+syn match   zshDollarVar  /\$\h\w*/
+syn match   zshDeref      /\$[=^~]*[#+]*\h\w*\>/
 
 " Builtins {{{2
-syn match   zshBuiltin '\%(^\|\s\)[.:]\ze\s'
+syn match   zshBuiltin /\%(^\|\s\)[.:]\ze\s/
 syn keyword zshBuiltin alias autoload bg bindkey break bye cap cd chdir clone comparguments compcall
       \ compctl compdescribe compfiles compgroups compquote comptags comptry compvalues continue dirs
       \ disable disown echo echotc echoti emulate enable eval exec exit export false fc fg functions
@@ -319,31 +319,31 @@ syn match zshOption /
 syn keyword zshTypes float integer local typeset declare private readonly
 
 " Switches {{{2
-" syn match zshSwitches '\s\zs--\=[a-zA-Z0-9-]\+'
+" syn match zshSwitches /\s\zs--\=[a-zA-Z0-9-]\+/
 
 " Numbers {{{2
-syn match zshNumber '[+-]\=\<\d\+\>'
-syn match zshNumber '[+-]\=\<0x\x\+\>'
-syn match zshNumber '[+-]\=\<0\o\+\>'
-syn match zshNumber '[+-]\=\d\+#[-+]\=\w\+\>'
-syn match zshNumber '[+-]\=\d\+\.\d\+\>'
+syn match zshNumber /[+-]\=\<\d\+\>/
+syn match zshNumber /[+-]\=\<0x\x\+\>/
+syn match zshNumber /[+-]\=\<0\o\+\>/
+syn match zshNumber /[+-]\=\d\+#[-+]\=\w\+\>/
+syn match zshNumber /[+-]\=\d\+\.\d\+\>/
 
 " Substitution {{{2
 " TODO: $[...] is the same as $((...)), so add that as well.
 syn cluster zshSubst    contains=zshSubst,zshOldSubst,zshMthSubs
-syn region  zshSubst    matchgroup=zshSubstDelim start='\$('  skip='\\)' end=')'  fold transparent           contains=TOP
-syn region  zshParens                            start='('    skip='\\)' end=')'  fold transparent
-syn region  zshGlob                              start='(#'              end=')'
-syn region  zshMthSubs  matchgroup=zshSubstDelim start='\$((' skip='\\)' end='))' fold transparent keepend   contains=zshParens,@zshSubst,zshNumber,@zshDerefs,zshString
-syn region  zshBrackets                          start='{'    skip='\\}' end='}'  fold transparent contained
-syn region  zshBrackets                          start='{'    skip='\\}' end='}'  fold transparent           contains=TOP
-syn region  zshSubst    matchgroup=zshSubstDelim start='\${'  skip='\\}' end='}'  fold                       contains=@zshSubst,zshBrackets,zshLiteral,zshString
+syn region  zshSubst    matchgroup=zshSubstDelim start=/\$(/  skip=/\\)/ end=/)/  fold transparent           contains=TOP
+syn region  zshParens                            start=/(/    skip=/\\)/ end=/)/  fold transparent
+syn region  zshGlob                              start=/(#/              end=/)/
+syn region  zshMthSubs  matchgroup=zshSubstDelim start=/\$((/ skip=/\\)/ end=/))/ fold transparent keepend   contains=zshParens,@zshSubst,zshNumber,@zshDerefs,zshString
+syn region  zshBrackets                          start=/{/    skip=/\\}/ end=/}/  fold transparent contained
+syn region  zshBrackets                          start=/{/    skip=/\\}/ end=/}/  fold transparent           contains=TOP
+syn region  zshSubst    matchgroup=zshSubstDelim start=/\${/  skip=/\\}/ end=/}/  fold                       contains=@zshSubst,zshBrackets,zshLiteral,zshString
 syn region  zshOldSubst matchgroup=zshSubstDelim start=+`+    skip=+\\`+ end=+`+  fold                       contains=TOP,zshOldSubst
 
 " Other {{{2
 syn sync minlines=50 maxlines=90
-syn sync match zshHereDocSync    grouphere  NONE '<<-\=\s*\%(\\\=\S\+\|\(["']\)\S\+\1\)'
-syn sync match zshHereDocEndSync groupthere NONE '^\s*EO\a\+\>'
+syn sync match zshHereDocSync    grouphere  NONE /<<-\=\s*\%(\\\=\S\+\|\(["']\)\S\+\1\)/
+syn sync match zshHereDocEndSync groupthere NONE /^\s*EO\a\+\>/
 
 " Highlight settings {{{1
 hi def link zshTodo         Todo
