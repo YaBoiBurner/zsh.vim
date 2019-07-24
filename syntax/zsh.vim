@@ -38,21 +38,21 @@ syn region  zshComment          start='^\s*#' end='^\%(\s*#\)\@!'
 syn match   zshPreProc          '^\%1l#\%(!\|compdef\|autoload\).*$'
 
 " Literals {{{2
-syn match   zshQuoted           '\\.'
+syn match   zshLiteral           '\\.'
 
 " Strings {{{2
-syn region  zshString           matchgroup=zshStringDelimiter start=+"+ end=+"+
-                                \ contains=zshQuoted,@zshDerefs,@zshSubst fold
-syn region  zshString           matchgroup=zshStringDelimiter start=+'+ end=+'+ fold
+syn region  zshString           matchgroup=zshStrDelim start=+"+ end=+"+
+                                \ contains=zshLiteral,@zshDerefs,@zshSubst fold
+syn region  zshString           matchgroup=zshStrDelim start=+'+ end=+'+ fold
 " XXX: This should probably be more precise, but Zsh seems a bit confused about it itself
-syn region  zshPOSIXString      matchgroup=zshStringDelimiter start=+\$'+
-                                \ end=+'+ contains=zshQuoted
+syn region  zshPOSIXStr         matchgroup=zshStrDelim start=+\$'+
+                                \ end=+'+ contains=zshLiteral
 
 " Job names {{{2
 syn match   zshJobSpec          '%\(\d\+\|?\=\w\+\|[%+-]\)'
 
 " Pre-command modifiers {{{2
-syn keyword zshPrecommand       noglob nocorrect exec command builtin - time
+syn keyword zshPreCmd           noglob nocorrect exec command builtin - time
 
 " Block endings {{{2
 syn keyword zshDelimiter        do done end
@@ -69,9 +69,9 @@ syn keyword zshRepeat           for foreach nextgroup=zshVariable skipwhite
 syn keyword zshException        always
 
 " Functions {{{2
-syn keyword zshKeyword          function nextgroup=zshKSHFunction skipwhite
+syn keyword zshKeyword          function nextgroup=zshKSHFunc skipwhite
 
-syn match   zshKSHFunction      contained '\w\S\+'
+syn match   zshKSHFunc          contained '\w\S\+'
 syn match   zshFunction         '^\s*\k\+\ze\s*()'
 
 " Operators {{{2
@@ -86,15 +86,15 @@ syn match   zshRedir            '|&\='
 syn region  zshHereDoc          matchgroup=zshRedir
                                 \ start='<\@<!<<\s*\z([^<]\S*\)'
                                 \ end='^\z1\>'
-                                \ contains=@zshSubst,@zshDerefs,zshQuoted,zshPOSIXString
+                                \ contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
 syn region  zshHereDoc          matchgroup=zshRedir
                                 \ start='<\@<!<<\s*\\\z(\S\+\)'
                                 \ end='^\z1\>'
-                                \ contains=@zshSubst,@zshDerefs,zshQuoted,zshPOSIXString
+                                \ contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
 syn region  zshHereDoc          matchgroup=zshRedir
                                 \ start='<\@<!<<-\s*\\\=\z(\S\+\)'
                                 \ end='^\s*\z1\>'
-                                \ contains=@zshSubst,@zshDerefs,zshQuoted,zshPOSIXString
+                                \ contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
 syn region  zshHereDoc          matchgroup=zshRedir
                                 \ start=+<\@<!<<\s*\(["']\)\z(\S\+\)\1+
                                 \ end='^\z1\>'
@@ -124,8 +124,8 @@ syn match zshDollarVar        '\$\h\w*'
 syn match zshDeref            '\$[=^~]*[#+]*\h\w*\>'
 
 " Builtins {{{2
-syn match   zshCommands         '\%(^\|\s\)[.:]\ze\s'
-syn keyword zshCommands         alias autoload bg bindkey break bye cap cd
+syn match   zshBuiltin          '\%(^\|\s\)[.:]\ze\s'
+syn keyword zshBuiltin          alias autoload bg bindkey break bye cap cd
                                 \ chdir clone comparguments compcall compctl
                                 \ compdescribe compfiles compgroups compquote
                                 \ comptags comptry compvalues continue dirs
@@ -354,7 +354,7 @@ syn match   zshOption /
 " Variable types {{{2
 syn keyword zshTypes            float integer local typeset declare private readonly
 
-" XXX: this may be too much
+" Switches {{{2
 " syn match   zshSwitches         '\s\zs--\=[a-zA-Z0-9-]\+'
 
 " Numbers {{{2
@@ -366,21 +366,21 @@ syn match   zshNumber           '[+-]\=\d\+\.\d\+\>'
 
 " Substitution {{{2
 " TODO: $[...] is the same as $((...)), so add that as well.
-syn cluster zshSubst            contains=zshSubst,zshOldSubst,zshMathSubst
+syn cluster zshSubst            contains=zshSubst,zshOldSubst,zshMthSubs
 syn region  zshSubst            matchgroup=zshSubstDelim transparent
                                 \ start='\$(' skip='\\)' end=')' contains=TOP fold
-syn region  zshParentheses      transparent start='(' skip='\\)' end=')' fold
+syn region  zshParens           transparent start='(' skip='\\)' end=')' fold
 syn region  zshGlob             start='(#' end=')'
-syn region  zshMathSubst        matchgroup=zshSubstDelim transparent
+syn region  zshMthSubs          matchgroup=zshSubstDelim transparent
                                 \ start='\$((' skip='\\)' end='))'
-                                \ contains=zshParentheses,@zshSubst,zshNumber,
+                                \ contains=zshParens,@zshSubst,zshNumber,
                                 \ @zshDerefs,zshString keepend fold
 syn region  zshBrackets         contained transparent start='{' skip='\\}'
                                 \ end='}' fold
 syn region  zshBrackets         transparent start='{' skip='\\}'
                                 \ end='}' contains=TOP fold
 syn region  zshSubst            matchgroup=zshSubstDelim start='\${' skip='\\}'
-                                \ end='}' contains=@zshSubst,zshBrackets,zshQuoted,zshString fold
+                                \ end='}' contains=@zshSubst,zshBrackets,zshLiteral,zshString fold
 syn region  zshOldSubst         matchgroup=zshSubstDelim start=+`+ skip=+\\`+
                                 \ end=+`+ contains=TOP,zshOldSubst fold
 
@@ -393,37 +393,37 @@ syn sync    match zshHereDocEndSync groupthere  NONE '^\s*EO\a\+\>'
 hi def link zshTodo             Todo
 hi def link zshComment          Comment
 hi def link zshPreProc          PreProc
-hi def link zshQuoted           SpecialChar
+hi def link zshLiteral          SpecialChar
 hi def link zshString           String
-hi def link zshStringDelimiter  zshString
-hi def link zshPOSIXString      zshString
+hi def link zshStrDelim         zshString
+hi def link zshPOSIXStr         zshString
 hi def link zshJobSpec          Special
-hi def link zshPrecommand       Special
+hi def link zshPreCmd           Special
 hi def link zshDelimiter        Keyword
 hi def link zshConditional      Conditional
 hi def link zshException        Exception
 hi def link zshRepeat           Repeat
 hi def link zshKeyword          Keyword
 hi def link zshFunction         None
-hi def link zshKSHFunction      zshFunction
+hi def link zshKSHFunc          zshFunction
 hi def link zshHereDoc          String
 hi def link zshOperator         None
 hi def link zshRedir            Operator
 hi def link zshVariable         None
 hi def link zshVariableDef      zshVariable
-hi def link zshDereferencing    PreProc
-hi def link zshShortDeref       zshDereferencing
-hi def link zshLongDeref        zshDereferencing
-hi def link zshDeref            zshDereferencing
-hi def link zshDollarVar        zshDereferencing
-hi def link zshCommands         Keyword
+hi def link zshDereference      PreProc
+hi def link zshShortDeref       zshDereference
+hi def link zshLongDeref        zshDereference
+hi def link zshDeref            zshDereference
+hi def link zshDollarVar        zshDereference
+hi def link zshBuiltin          Keyword
 hi def link zshOptStart         Keyword
 hi def link zshOption           Constant
 hi def link zshTypes            Type
 hi def link zshSwitches         Special
 hi def link zshNumber           Number
 hi def link zshSubst            PreProc
-hi def link zshMathSubst        zshSubst
+hi def link zshMthSubs          zshSubst
 hi def link zshOldSubst         zshSubst
 hi def link zshSubstDelim       zshSubst
 hi def link zshGlob             zshSubst
