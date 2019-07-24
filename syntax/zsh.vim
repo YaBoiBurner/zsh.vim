@@ -43,7 +43,7 @@ syn region zshString   matchgroup=zshStrDelim start=+'+   end=+'+ fold
 syn region zshPOSIXStr matchgroup=zshStrDelim start=+\$'+ end=+'+      contains=zshLiteral
 
 " Job names {{{2
-syn match zshJobSpec /%\(\d\+\|?\=\w\+\|[%+-]\)/
+syn match zshJobSpec /%\(\d\+\|?\?\w\+\|[%+-]\)/
 
 " Pre-command modifiers {{{2
 syn keyword zshPreCmd noglob nocorrect exec command builtin - time
@@ -67,23 +67,23 @@ syn match   zshKSHFunc  /\w\S\+/ contained
 syn match   zshFunction /^\s*\k\+\ze\s*()/
 
 " Operators {{{2
-syn match zshOperator /||\|&&\|;\|&!\=/
+syn match zshOperator /||\|&&\|;\|&!\?/
 
 " Redirects {{{2
-syn match zshRedir /\d\=\(<\|<>\|<<<\|<&\s*[0-9p-]\=\)/
-syn match zshRedir /\d\=\(>\|>>\|>&\s*[0-9p-]\=\|&>\|>>&\|&>>\)[|!]\=/
-syn match zshRedir /|&\=/
+syn match zshRedir /\d\?\(<\|<>\|<<<\|<&\s*[0-9p-]\?\)/
+syn match zshRedir /\d\?\(>\|>>\|>&\s*[0-9p-]\?\|&>\|>>&\|&>>\)[|!]\?/
+syn match zshRedir /|&\?/
 
 " HereDocs {{{2
 syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<\s*\z([^<]\S*\)'         end='^\z1\>'    contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
 syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<\s*\\\z(\S\+\)'          end='^\z1\>'    contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
-syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<-\s*\\\=\z(\S\+\)'       end='^\s*\z1\>' contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
+syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<-\s*\\\?\z(\S\+\)'       end='^\s*\z1\>' contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
 syn region zshHereDoc matchgroup=zshRedir start=+<\@<!<<\s*\(["']\)\z(\S\+\)\1+  end='^\z1\>'
 syn region zshHereDoc matchgroup=zshRedir start=+<\@<!<<-\s*\(["']\)\z(\S\+\)\1+ end='^\s*\z1\>'
 
 " Variables {{{2
 syn match  zshVariable    /\<\h\w*/ contained
-syn match  zshVariableDef /\<\h\w*\ze+\==/
+syn match  zshVariableDef /\<\h\w*\ze+\?=/
 syn region zshVariableDef start=/\$\@<!\<\h\w*\[/ end=/\]\ze+\?=\?/ oneline contains=@zshSubst
 
 syn cluster zshDerefs     contains=zshShortDeref,zshLongDeref,zshDeref,zshDollarVar
@@ -319,14 +319,14 @@ syn match zshOption /
 syn keyword zshTypes float integer local typeset declare private readonly
 
 " Switches {{{2
-" syn match zshSwitches /\s\zs--\=[a-zA-Z0-9-]\+/
+" syn match zshSwitches /\s\zs--\?[a-zA-Z0-9-]\+/
 
 " Numbers {{{2
-syn match zshNumber /[+-]\=\<\d\+\>/
-syn match zshNumber /[+-]\=\<0x\x\+\>/
-syn match zshNumber /[+-]\=\<0\o\+\>/
-syn match zshNumber /[+-]\=\d\+#[-+]\=\w\+\>/
-syn match zshNumber /[+-]\=\d\+\.\d\+\>/
+syn match zshNumber /[+-]\?\<\d\+\>/
+syn match zshNumber /[+-]\?\<0x\x\+\>/
+syn match zshNumber /[+-]\?\<0\o\+\>/
+syn match zshNumber /[+-]\?\d\+#[-+]\?\w\+\>/
+syn match zshNumber /[+-]\?\d\+\.\d\+\>/
 
 " Substitution {{{2
 " TODO: $[...] is the same as $((...)), so add that as well.
@@ -342,7 +342,7 @@ syn region  zshOldSubst matchgroup=zshSubstDelim start=+`+    skip=+\\`+ end=+`+
 
 " Other {{{2
 syn sync minlines=50 maxlines=90
-syn sync match zshHereDocSync    grouphere  NONE /<<-\=\s*\%(\\\=\S\+\|\(["']\)\S\+\1\)/
+syn sync match zshHereDocSync    grouphere  NONE /<<-\?\s*\%(\\\?\S\+\|\(["']\)\S\+\1\)/
 syn sync match zshHereDocEndSync groupthere NONE /^\s*EO\a\+\>/
 
 " Highlight settings {{{1
