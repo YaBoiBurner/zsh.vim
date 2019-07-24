@@ -374,7 +374,7 @@ hi def link zshLongDeref    zshDereference
 hi def link zshDeref        zshDereference
 hi def link zshDollarVar    zshDereference
 hi def link zshBuiltin      Function
-hi def link zshOptStart     Keyword
+hi def link zshOptStart     zshBuiltin
 hi def link zshOption       Constant
 hi def link zshTypes        Type
 hi def link zshSwitches     Special
