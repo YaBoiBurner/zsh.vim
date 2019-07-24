@@ -99,12 +99,12 @@ syn match   zshDeref      /\v\$[=^~]*[#+]*\h\w*>/
 " Builtins {{{2
 syn match   zshBuiltin /\v(^|\s)[.:]\ze\s/
 syn keyword zshBuiltin alias autoload bg bindkey break bye cap cd chdir clone comparguments compcall
-      \ compctl compdescribe compfiles compgroups compquote comptags comptry compvalues continue dirs
-      \ disable disown echo echotc echoti emulate enable eval exec exit export false fc fg functions
-      \ getcap getln getopts hash history jobs kill let limit log logout popd print printf pushd
-      \ pushln pwd r read rehash return sched set setcap shift source stat suspend test times trap
-      \ true ttyctl type ulimit umask unalias unfunction unhash unlimit unset  vared wait whence
-      \ where which zcompile zformat zftp zle zmodload zparseopts zprof zpty zrecompile zregexparse
+      \ compctl compdef compdescribe compfiles compgroups compquote comptags comptry compvalues
+      \ continue dirs disable disown echo echotc echoti emulate enable eval exec exit export false
+      \ fc fg functions getcap getln getopts hash history jobs kill let limit log logout popd print
+      \ printf pushd pushln pwd r read rehash return sched set setcap shift source stat suspend test
+      \ times trap true ttyctl type ulimit umask unalias unfunction unhash unlimit unset vared wait
+      \ whence where which zcompile zformat zftp zle zmodload zparseopts zprof zpty zregexparse
       \ zsocket zstyle ztcp
 
 " Options {{{2
