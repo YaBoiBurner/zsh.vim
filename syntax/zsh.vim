@@ -7,14 +7,14 @@
 " Repository:           https://github.com/chrisbra/vim-zsh
 
 " Pre work {{{1
-if exists("b:current_syntax")
+if exists('b:current_syntax')
   finish
 endif
 
-let s:cpo_save = &cpo
-set cpo&vim
+let s:cpo_save = &cpoptions
+set cpoptions&vim
 
-if v:version > 704 || (v:version == 704 && has("patch1142"))
+if v:version > 704 || (v:version == 704 && has('patch1142'))
   syn iskeyword @,48-57,_,192-255,#,-
 else
   setlocal iskeyword+=-
@@ -385,9 +385,9 @@ hi def link zshSubstDelim   zshSubst
 hi def link zshGlob         zshSubst
 
 " Cleanup {{{1
-let b:current_syntax = "zsh"
+let b:current_syntax = 'zsh'
 
-let &cpo = s:cpo_save
+let &cpoptions = s:cpo_save
 unlet s:cpo_save
 
 " vim:ft=vim:fdm=marker

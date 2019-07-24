@@ -6,7 +6,7 @@
 " License:              Vim (see :h license)
 " Repository:           https://github.com/chrisbra/vim-zsh
 
-if exists("b:did_indent")
+if exists('b:did_indent')
   finish
 endif
 
