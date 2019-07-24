@@ -40,7 +40,6 @@ syn match zshLiteral '\\.'
 " Strings {{{2
 syn region zshString   matchgroup=zshStrDelim start=+"+ end=+"+ contains=zshLiteral,@zshDerefs,@zshSubst fold
 syn region zshString   matchgroup=zshStrDelim start=+'+ end=+'+ fold
-" XXX: This should probably be more precise, but Zsh seems a bit confused about it itself
 syn region zshPOSIXStr matchgroup=zshStrDelim start=+\$'+ end=+'+ contains=zshLiteral
 
 " Job names {{{2
@@ -85,7 +84,6 @@ syn region zshHereDoc matchgroup=zshRedir start=+<\@<!<<-\s*\(["']\)\z(\S\+\)\1+
 " Variables {{{2
 syn match  zshVariable    '\<\h\w*' contained
 syn match  zshVariableDef '\<\h\w*\ze+\=='
-" XXX: how safe is this?
 syn region zshVariableDef oneline start='\$\@<!\<\h\w*\[' end='\]\ze+\?=\?' contains=@zshSubst
 
 syn cluster zshDerefs     contains=zshShortDeref,zshLongDeref,zshDeref,zshDollarVar
