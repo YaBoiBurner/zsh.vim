@@ -28,8 +28,8 @@ endif
 syn keyword zshTodo contained TODO FIXME XXX NOTE
 
 " Comments {{{2
-syn region zshComment oneline start='\%(^\|\s\+\)#' end='$' contains=zshTodo,@Spell fold
-syn region zshComment start='^\s*#' end='^\%(\s*#\)\@!' contains=zshTodo,@Spell fold
+syn region zshComment start='\%(^\|\s\+\)#' end='$'             contains=zshTodo,@Spell fold oneline
+syn region zshComment start='^\s*#'         end='^\%(\s*#\)\@!' contains=zshTodo,@Spell fold
 
 " Pre processors {{{2
 syn match zshPreProc '^\%1l#\%(!\|compdef\|autoload\).*$'
@@ -38,9 +38,9 @@ syn match zshPreProc '^\%1l#\%(!\|compdef\|autoload\).*$'
 syn match zshLiteral '\\.'
 
 " Strings {{{2
-syn region zshString   matchgroup=zshStrDelim start=+"+ end=+"+ contains=zshLiteral,@zshDerefs,@zshSubst fold
-syn region zshString   matchgroup=zshStrDelim start=+'+ end=+'+ fold
-syn region zshPOSIXStr matchgroup=zshStrDelim start=+\$'+ end=+'+ contains=zshLiteral
+syn region zshString   matchgroup=zshStrDelim start=+"+   end=+"+ fold contains=zshLiteral,@zshDerefs,@zshSubst
+syn region zshString   matchgroup=zshStrDelim start=+'+   end=+'+ fold
+syn region zshPOSIXStr matchgroup=zshStrDelim start=+\$'+ end=+'+      contains=zshLiteral
 
 " Job names {{{2
 syn match zshJobSpec '%\(\d\+\|?\=\w\+\|[%+-]\)'
@@ -75,16 +75,16 @@ syn match zshRedir '\d\=\(>\|>>\|>&\s*[0-9p-]\=\|&>\|>>&\|&>>\)[|!]\='
 syn match zshRedir '|&\='
 
 " HereDocs {{{2
-syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<\s*\z([^<]\S*\)' end='^\z1\>' contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
-syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<\s*\\\z(\S\+\)' end='^\z1\>' contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
-syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<-\s*\\\=\z(\S\+\)' end='^\s*\z1\>' contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
-syn region zshHereDoc matchgroup=zshRedir start=+<\@<!<<\s*\(["']\)\z(\S\+\)\1+ end='^\z1\>'
+syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<\s*\z([^<]\S*\)'         end='^\z1\>'    contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
+syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<\s*\\\z(\S\+\)'          end='^\z1\>'    contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
+syn region zshHereDoc matchgroup=zshRedir start='<\@<!<<-\s*\\\=\z(\S\+\)'       end='^\s*\z1\>' contains=@zshSubst,@zshDerefs,zshLiteral,zshPOSIXStr
+syn region zshHereDoc matchgroup=zshRedir start=+<\@<!<<\s*\(["']\)\z(\S\+\)\1+  end='^\z1\>'
 syn region zshHereDoc matchgroup=zshRedir start=+<\@<!<<-\s*\(["']\)\z(\S\+\)\1+ end='^\s*\z1\>'
 
 " Variables {{{2
 syn match  zshVariable    '\<\h\w*' contained
 syn match  zshVariableDef '\<\h\w*\ze+\=='
-syn region zshVariableDef oneline start='\$\@<!\<\h\w*\[' end='\]\ze+\?=\?' contains=@zshSubst
+syn region zshVariableDef start='\$\@<!\<\h\w*\[' end='\]\ze+\?=\?' oneline contains=@zshSubst
 
 syn cluster zshDerefs     contains=zshShortDeref,zshLongDeref,zshDeref,zshDollarVar
 syn match   zshShortDeref '\$[!#$*@?_-]\w\@!'
@@ -331,14 +331,14 @@ syn match zshNumber '[+-]\=\d\+\.\d\+\>'
 " Substitution {{{2
 " TODO: $[...] is the same as $((...)), so add that as well.
 syn cluster zshSubst    contains=zshSubst,zshOldSubst,zshMthSubs
-syn region  zshSubst    matchgroup=zshSubstDelim transparent start='\$(' skip='\\)' end=')' contains=TOP fold
-syn region  zshParens   transparent start='(' skip='\\)' end=')' fold
-syn region  zshGlob     start='(#' end=')'
-syn region  zshMthSubs  matchgroup=zshSubstDelim transparent start='\$((' skip='\\)' end='))' contains=zshParens,@zshSubst,zshNumber, @zshDerefs,zshString keepend fold
-syn region  zshBrackets contained transparent start='{' skip='\\}' end='}' fold
-syn region  zshBrackets transparent start='{' skip='\\}' end='}' contains=TOP fold
-syn region  zshSubst    matchgroup=zshSubstDelim start='\${' skip='\\}' end='}' contains=@zshSubst,zshBrackets,zshLiteral,zshString fold
-syn region  zshOldSubst matchgroup=zshSubstDelim start=+`+ skip=+\\`+ end=+`+ contains=TOP,zshOldSubst fold
+syn region  zshSubst    matchgroup=zshSubstDelim start='\$('  skip='\\)' end=')'  fold transparent           contains=TOP
+syn region  zshParens                            start='('    skip='\\)' end=')'  fold transparent
+syn region  zshGlob                              start='(#'              end=')'
+syn region  zshMthSubs  matchgroup=zshSubstDelim start='\$((' skip='\\)' end='))' fold transparent keepend   contains=zshParens,@zshSubst,zshNumber,@zshDerefs,zshString
+syn region  zshBrackets                          start='{'    skip='\\}' end='}'  fold transparent contained
+syn region  zshBrackets                          start='{'    skip='\\}' end='}'  fold transparent           contains=TOP
+syn region  zshSubst    matchgroup=zshSubstDelim start='\${'  skip='\\}' end='}'  fold                       contains=@zshSubst,zshBrackets,zshLiteral,zshString
+syn region  zshOldSubst matchgroup=zshSubstDelim start=+`+    skip=+\\`+ end=+`+  fold                       contains=TOP,zshOldSubst
 
 " Other {{{2
 syn sync minlines=50 maxlines=90
