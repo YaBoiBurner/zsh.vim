@@ -15,7 +15,7 @@ let s:cpo_save = &cpoptions
 set cpoptions&vim
 
 if v:version > 704 || (v:version == 704 && has('patch1142'))
-  syn iskeyword @,48-57,_,192-255,#,-
+  syn iskeyword @,48-57,_,192-255,#,-,+
 else
   setlocal iskeyword+=-
 endif
@@ -60,7 +60,7 @@ syn keyword zshRepeat while until repeat
 syn keyword zshRepeat for foreach nextgroup=zshVariable skipwhite
 
 " Exceptions {{{2
-syn keyword zshException always
+syn keyword zshException always catch throw
 
 " Functions {{{2
 syn keyword zshKeyword  function skipwhite nextgroup=zshKSHFunc
@@ -106,6 +106,82 @@ syn keyword zshBuiltin alias autoload bg bindkey break bye cap cd chdir clone co
       \ true ttyctl type ulimit umask unalias unfunction unhash unlimit unset vared wait whence
       \ where which zcompile zformat zftp zle zmodload zparseopts zprof zpty zregexparse zsocket
       \ zstyle ztcp
+
+" Provided Functions {{{2
+" I could automate this but I'm not gonna.
+" nslookup is excluded for now.
+syn keyword zshStdFunc
+      \ add-zle-hook-widget add-zsh-hook
+      \ cdr chpwd_recent_dirs colors compaudit compdef compdump compinit compinstall
+      \ fned
+      \ is-at-least
+      \ pick-web-browser prompt promptinit
+      \ regexp-replace run-help
+      \ tetriscurses
+      \ vcs_info vcs_info_hookadd vcs_info_hookdel vcs_info_lastmsg vcs_info_printsys vcs_info_setsys
+      \ zargs zcalc zcp zed zkbd zln zmathfunc zmathfuncdef zmv zrecompile zsh-mime-handler zsh-mime-setup zsh-newuser-install zstyle+
+
+" Completion functions {{{3
+syn keyword zshStdFunc
+      \ _all_matches _approximate _canonical_paths _cmdambivalent _cmdstring _complete _correct
+      \ _expand _expand_alias _extensions _external_pwds _history _ignored _list _match _menu _oldlist
+      \ _precommand _prefix _user_expand
+syn keyword zshStdFunc
+      \ _bash_completions _complete_debug _complete_help _complete_help_generic _complete_tag
+      \ _correct_filename _correct_word _expand_alias _expand_word _generic _history_complete_word
+      \ _most_recent_file _next_tags _read_comp
+syn keyword zshStdFunc
+      \ _absolute_command_paths _all_labels _alternative _arguments _cache_invalid _call_function
+      \ _call_program _combination _command_names _comp_locale _completers _describe _description
+      \ _dir_list _dispatch _email_addresses _files _gnu_generic _guard _message _multi_parts
+      \ _next_label _normal _options _options_set _options_unset _parameters _path_files _pick_variant
+      \ _regex_arguements _regex_words _requested _retrieve_cache _sep_parts _sequence _setup
+      \ _store_cache _tags _tilde_files _values _wanted _widgets
+
+" ZLE Core Functions {{{3
+syn keyword zshStdFunc
+      \ zle-isearch-exit zhe-isearch-update zle-line-pre-redraw zle-line-init zle-line-finish
+      \ zle-history-line-set zle-keymap-select
+syn keyword zshStdFunc
+      \ vi-backward-blank-word vi-backward-blank-word-end backward-char vi-backward-char backward-word
+      \ emacs-backward-word vi-backward-word vi-backward-word-end beginning-of-line
+      \ vi-beginning-of-line down-line end-of-line vi-end-of-line vi-forward-blank-word
+      \ vi-forward-blank-word-end forward-char vi-forward-char vi-find-next-char
+      \ vi-find-next-char-skip vi-find-prev-char vi-find-prev-char-skip vi-first-non-blank
+      \ vi-forward-word forward-word emacs-forward-word vi-forward-word-end vi-goto-column
+      \ vi-goto-mark vi-goto-mark-line vi-repeat-find vi-rev-repeat-find up-line
+syn keyword zshStdFunc
+      \ beginning-of-buffer-or-history beginning-of-line-hist beginning-of-history
+      \ down-line-or-history vi-down-line-or-history down-line-or-search down-history
+      \ history-beginning-search-backward end-of-buffer-or-history end-of-line-hist end-of-history
+      \ vi-fetch-history history-incremental-search-backward history-incremental-search-forward
+      \ history-incremental-pattern-search-backward history-incremental-pattern-search-forward
+      \ history-search-backward vi-history-search-backward history-search-forward
+      \ vi-history-search-forward infer-next-history insert-last-word vi-repeat-search
+      \ vi-rev-repeat-search up-line-or-history vi-up-line-or-history up-line-or-search
+      \ up-history history-beginning-search-forward set-local-history
+
+" ZLE Contrib Functions {{{3
+syn keyword zshStdFunc
+      \ backward-kill-word-match backward-word-match bracketed-paste-magic
+      \ capitalize-word-match copy-earlier-word cycle-completion-positions
+      \ delete-backward-and-predict delete-whole-word-match down-case-word-match
+      \ down-line-or-beginning-search edit-command-line expand-absolute-path
+      \ forward-word-match history-beginning-search-menu history-pattern-search
+      \ history-search-end incarg incremental-complete-word insert-and-predict
+      \ insert-composed-char insert-files insert-unicode-char kill-word-match
+      \ match-word-context match-words-by-style modify-current-argument
+      \ narrow-to-region narrow-to-region-invisible predict-on predict-off
+      \ read-from-minibuffer replace-argument[-edit] replace-pattern
+      \ replace-pattern-again replace-string replace-string-again send-invisible
+      \ select-word-match select-word-style smart-insert-last-word
+      \ split-shell-argument tetris transpose-lines transpose-words-match
+      \ up-case-word-match up-line-or-beginning-search url-quote-magic
+      \ vi-pipe which-command zcalc-auto-insert
+
+" User Functions {{{2
+" TODO: run-help-*
+" TODO: prompt_*_setup
 
 " Options {{{2
 " Options, generated by: echo ${(j:\n:)options[(I)*]} | sort
@@ -374,6 +450,7 @@ hi def link zshLongDeref    zshDereference
 hi def link zshDeref        zshDereference
 hi def link zshDollarVar    zshDereference
 hi def link zshBuiltin      Function
+hi def link zshStdFunc      Function
 hi def link zshOptStart     zshBuiltin
 hi def link zshOption       Constant
 hi def link zshTypes        Type
