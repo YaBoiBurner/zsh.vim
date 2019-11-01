@@ -28,14 +28,14 @@ endif
 syn keyword zshTodo contained TODO FIXME XXX NOTE
 
 " Comments {{{2
-syn region zshComment start=/\v(^|\s+)#/ end=/$/           fold oneline
+syn region zshComment start=/\%(^\|\s\+\)#/ end=/$/           fold oneline
       \ contains=zshTodo,@Spell
-syn region zshComment start=/\v^\s*#/    end=/\v^(\s*#)@!/ fold
+syn region zshComment start=/^\s*#/    end=/^\%(\s*#\)\@!/ fold
       \ contains=zshTodo,@Spell
 
 " Pre processors {{{2
-syn match zshPreProc /\v^%1l#(!|compdef|autoload).*$/
-syn match zshPreProc /\v^%2l#description.+$/
+syn match zshPreProc /^\%1l#\%(!\|compdef\|autoload\).*$/
+syn match zshPreProc /^\%2l#description.\+$/
 
 " Literals {{{2
 syn match zshLiteral /\\./
@@ -48,7 +48,7 @@ syn region zshPOSIXStr matchgroup=zshStrDelim start=+\$'+ end=+'+
       \ contains=zshLiteral
 
 " Job names {{{2
-syn match zshJobSpec /\v\%(\d+|\??\w+|[%+-])/
+syn match zshJobSpec /\%(\d\+\|?\?\w\+\|[%+-]\)/
 
 " Pre-command modifiers {{{2
 syn keyword zshPreCmd noglob nocorrect exec command builtin - time
@@ -68,15 +68,15 @@ syn keyword zshException always catch throw
 
 " Functions {{{2
 syn keyword zshKeyword  function skipwhite nextgroup=zshKSHFunc
-syn match   zshKSHFunc  /\v\w\S+/ contained
-syn match   zshFunction /\v^\s*\k+\ze\s*\(\)/
+syn match   zshKSHFunc  /\w\S\+/ contained
+syn match   zshFunction /^\s*\k\+\ze\s*()/
 
 " Operators {{{2
 syn match zshOperator /||\|&&\|;\|&!\?/
 
 " Redirects {{{2
-syn match zshRedir /\v\d?(\<(|\>|\<\<|\&\s*[0-9p-]?))/
-syn match zshRedir /\v\d?(\>(|\>|\&\s*[0-9p-]?|\>\&)|\&\>\>?)[|!]?/
+syn match zshRedir /\d\?\%(<\%(\|>\|<<\|&\s*[0-9p-]\?\)\)/
+syn match zshRedir /\d\?\%(>\%(\|>\|&\s*[0-9p-]\?\|>&\)\|&>>\?\)[|!]\?/
 syn match zshRedir /|&\?/
 
 " HereDocs {{{2
@@ -92,25 +92,25 @@ syn region zshHereDoc matchgroup=zshRedir start=+<\@<!<<-\s*\(["']\)\z(\S\+\)\1+
       \ end='^\s*\z1\>'
 
 " Variables {{{2
-syn match  zshVariable    /\v<\h\w*/ contained
-syn match  zshVariableDef /\v<\h\w*\ze\+?\=/
-syn region zshVariableDef start=/\v\$@<!<\h\w*\[/ end=/\v\]\ze\+?\=?/ oneline
+syn match  zshVariable    /\<\h\w*/ contained
+syn match  zshVariableDef /\<\h\w*\ze+\?=/
+syn region zshVariableDef start=/\$\@<!\<\h\w*\[/ end=/\]\ze+\?=\?/ oneline
       \ contains=@zshSubst
 
 syn cluster zshDerefs contains=zshShortDeref,zshLongDeref,zshDeref,zshDollarVar
 
-syn match   zshShortDeref /\v\$[!#$*@?_-]\w@!/
-syn match   zshShortDeref /\v\$[=^~]*[#+]*\d+>/
-syn match   zshLongDeref  /\v
-      \ \$ARGC|\$argv|\$(pipe)?status|\$(CPU|MACH|OS)TYPE|\$(E?[GU]|PP)ID|
-      \ \$ERRNO|\$HOST|\$LINENO|\$LOGNAME|\$(OLD)?PWD|\$OPT(ARG|IND)|\$RANDOM|
-      \ \$SECONDS|\$SHLVL|\$signals|\$TRY_BLOCK_ERROR|\$TTY(IDLE)?|\$VENDOR|
-      \ \$ZSH_(NAME|VERSION)|\$REPLY|\$reply|\$TERM|\$USERNAME/
-syn match   zshDollarVar  /\v\$\h\w*/
-syn match   zshDeref      /\v\$[=^~]*[#+]*\h\w*>/
+syn match   zshShortDeref /\$[!#$*@?_-]\w\@!/
+syn match   zshShortDeref /\$[=^~]*[#+]*\d\+\>/
+syn match   zshLongDeref  /
+      \ \$ARGC\|\$argv\|\$\%(pipe\)\?status\|\$\%(CPU\|MACH\|OS\)TYPE\|\$\%(E\?[GU]\|PP\)ID\|
+      \ \$ERRNO\|\$HOST\|\$LINENO\|\$LOGNAME\|\$\%(OLD\)\?PWD\|\$OPT\%(ARG\|IND\)\|\$RANDOM\|
+      \ \$SECONDS|\$SHLVL|\$signals|\$TRY_BLOCK_ERROR|\$TTY(IDLE)\?|\$VENDOR|
+      \ \$ZSH_\%(NAME\|VERSION\)\|\$REPLY\|\$reply\|\$TERM\|\$USERNAME/
+syn match   zshDollarVar  /\$\h\w*/
+syn match   zshDeref      /\$[=^~]*[#+]*\h\w*\>/
 
 " Builtins {{{2
-syn match   zshBuiltin /\v(^|\s)[.:]\ze\s/
+syn match   zshBuiltin /\%(^\|\s\)[.:]\ze\s/
 syn keyword zshBuiltin alias autoload bg bindkey break bye cap cd chdir clone
       \ comparguments compcall compctl compdescribe compfiles compgroups
       \ compquote comptags comptry compvalues continue dirs disable disown echo
@@ -218,7 +218,7 @@ syn keyword zshStdFunc
 
 syn case ignore
 
-syn match zshOptStart /\v^\s*(((un)?setopt)|set\s+[-+]o)/ skipwhite
+syn match zshOptStart /^\s*\%(\%(\%(un\)\?setopt\)\|set\s\+[-+]o\)/ skipwhite
       \ nextgroup=zshOption
 syn match zshOption /
       \ \%(\%(\<no_\?\)\?aliases\>\)\|
@@ -421,14 +421,14 @@ syn keyword zshTypes skipwhite
       \ nextgroup=zshVariable,zshVariableDef,zshSwitches
 
 " Switches {{{2
-syn match zshSwitches /\v\s\zs--?[a-zA-Z0-9-]+/
+syn match zshSwitches /\s\zs--\?[a-zA-Z0-9-]\+/
 
 " Numbers {{{2
-syn match zshNumber /\v[+-]?<\d+>/
-syn match zshNumber /\v[+-]?<0x\x+>/
-syn match zshNumber /\v[+-]?<0\o+>/
-syn match zshNumber /\v[+-]?\d+#[-+]?\w+>/
-syn match zshNumber /\v[+-]?\d+\.\d+>/
+syn match zshNumber /[+-]\?\<\d\+\>/
+syn match zshNumber /[+-]\?\<0x\x\+\>/
+syn match zshNumber /[+-]\?\<0\o\+\>/
+syn match zshNumber /[+-]\?\d\+#[-+]\?\w\+\>/
+syn match zshNumber /[+-]\?\d\+\.\d\+\>/
 
 " Substitution {{{2
 " TODO: $[...] is the same as $((...)), so add that as well.
